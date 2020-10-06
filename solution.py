@@ -31,10 +31,9 @@ class Node:
             return False
         
         #CONSTRAINT: Already visited states must not be regenerated
-        for node in self.path:
-            if node == self:
-                return False
-
+        if self in self.path:
+            return False
+            
         # first try to send a full boat, if that does not work, reduce passenger number by 1
         # because of the limits of these loops, boat size constraints cannot be violated
         for i in range(self.boat_size, 0, -1): 
