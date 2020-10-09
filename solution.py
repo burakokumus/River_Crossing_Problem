@@ -1,3 +1,6 @@
+'''
+Node class represents a single state in River Crossing Problem.
+'''
 class Node:
     def __init__(self, left_missionary, right_missionary, left_cannibal, right_cannibal, boat_size, boat_location = 1, path = [], children = []):
         self.left_missionary = left_missionary
@@ -16,7 +19,7 @@ class Node:
             print('base case')
             for n in self.path:
                 #print(n.left_missionary, n.left_cannibal, n.right_missionary, n.right_cannibal, n.boat_location)
-                print('left: {}M {}C    right: {}M {}C    boat: {}'.format(n.left_missionary, n.left_cannibal, n.right_missionary, n.right_cannibal, n.boat_location))
+                print(n)
             return True
 
         # CONSTRAINT: Boat cannot carry nonexisting people on the side that it is leaving
