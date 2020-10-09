@@ -1,3 +1,4 @@
+# Allows single stepping when True
 TRACE_MOD = False
 
 class Node:
@@ -10,31 +11,47 @@ class Node:
         self.boat_location = boat_location
         self.path = path
 
-    def generate_next(self):
+    def generate_next(self, depth = 0):
         if TRACE_MOD:
-            print(self)
+            print("  " * depth + self.__repr__())
         # base case
         if self.left_missionary == 0 and self.left_cannibal == 0:
             print('base case')
             for n in self.path:
-                #print(n.left_missionary, n.left_cannibal, n.right_missionary, n.right_cannibal, n.boat_location)
                 print(n)
+            print(self)
             return True
 
         # CONSTRAINT: Boat cannot carry nonexisting people on the side that it is leaving
         if self.left_cannibal < 0 or self.left_missionary < 0 or self.right_cannibal < 0 or self.right_missionary < 0:
+            if TRACE_MOD:
+                print("{}Boat cannot carry nonexisting people on the side that it is leaving".format("  " * depth))
+                print("{}Backtracing..".format("  " * depth))
+                input("{}Press Enter to proceed".format("  " * depth))
             return False
 
         # CONSTRAINT: Boat cannot leave more C than M
         if self.left_cannibal > self.left_missionary and self.left_missionary > 0:
+            if TRACE_MOD:
+                print("{}Boat cannot leave more C than M".format("  " * depth))
+                print("{}Backtracing..".format("  " * depth))
+                input("{}Press Enter to proceed".format("  " * depth))
             return False
 
-        #CONSTRAINT: There can not be more C than M at the destination
+        # CONSTRAINT: There can not be more C than M at the destination
         if self.right_cannibal > self.right_missionary and self.right_missionary > 0:
+            if TRACE_MOD:
+                print("{}There can not be more C than M at the destination".format("  " * depth))
+                print("{}Backtracing..".format("  " * depth))
+                input("{}Press Enter to proceed".format("  " * depth))
             return False
         
-        #CONSTRAINT: Already visited states must not be regenerated
+        # CONSTRAINT: Already visited states must not be regenerated
         if self in self.path:
+            if TRACE_MOD:
+                print("{}Already visited states must not be regenerated".format("  " * depth))
+                print("{}Backtracing..".format("  " * depth))
+                input("{}Press Enter to proceed".format("  " * depth))
             return False
             
         # first try to send a full boat, if that does not work, reduce passenger number by 1
@@ -51,20 +68,20 @@ class Node:
                     new_location = 0
                     new_node = Node(self.left_missionary - j, self.right_missionary + j, self.left_cannibal - i + j, self.right_cannibal + i - j, self.boat_size, new_location, new_path)
                     if TRACE_MOD:
-                        print("Carrying {} cannibals and {} missionaries to right".format(i - j, j))
-                        input("Press Enter to proceed")
+                        print("{}Carrying {} cannibals and {} missionaries to right".format("  " * depth, i - j, j))
+                        input("{}Press Enter to proceed".format("  " * depth))
                 else: # send boat to left
                     new_location = 1
                     new_node = Node(self.left_missionary + j, self.right_missionary - j, self.left_cannibal + i - j, self.right_cannibal - i + j, self.boat_size, new_location, new_path)
                     if TRACE_MOD:
-                        print("Carrying {} cannibals and {} missionaries to left".format(i - j, j))
-                        input("Press Enter to proceed")
+                        print("{}Carrying {} cannibals and {} missionaries to left".format("  " * depth, i - j, j))
+                        input("{}Press Enter to proceed".format("  " * depth))
 
-                if new_node.generate_next():
+                if new_node.generate_next(depth + 1):
                     return True
                 
 
-    def __eq__(self, other): # Tested, works
+    def __eq__(self, other):
         if (
             self.left_missionary == other.left_missionary and 
             self.left_cannibal == other.left_cannibal and 
