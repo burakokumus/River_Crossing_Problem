@@ -1,3 +1,5 @@
+TRACE_MOD = True
+
 class Node:
     def __init__(self, left_missionary, right_missionary, left_cannibal, right_cannibal, boat_size, boat_location = 1, path = []):
         self.left_missionary = left_missionary
@@ -65,6 +67,9 @@ class Node:
            ):
             return True
         return False
+
+    def __repr__(self):
+        return ('left: {}M {}C    right: {}M {}C    boat: {}'.format(self.left_missionary, self.left_cannibal, self.right_missionary, self.right_cannibal, self.boat_location))
 
 if __name__ == "__main__":
     n1 = Node(5, 0, 5, 0, 3)
