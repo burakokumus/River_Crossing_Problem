@@ -1,5 +1,5 @@
 class Node:
-    def __init__(self, left_missionary, right_missionary, left_cannibal, right_cannibal, boat_size, boat_location = 1, path = []):
+    def __init__(self, left_missionary, right_missionary, left_cannibal, right_cannibal, boat_size, boat_location = 1, path = [], children = []):
         self.left_missionary = left_missionary
         self.right_missionary = right_missionary
         self.left_cannibal = left_cannibal
@@ -7,6 +7,7 @@ class Node:
         self.boat_size = boat_size
         self.boat_location = boat_location
         self.path = path
+        self.children = children
 
     def generate_next(self):
 
@@ -54,6 +55,8 @@ class Node:
                 if new_node.generate_next():
                     return True
                 
+    def __repr__(self):
+        return ('left: {}M {}C    right: {}M {}C    boat: {}'.format(self.left_missionary, self.left_cannibal, self.right_missionary, self.right_cannibal, self.boat_location))     
 
     def __eq__(self, other): # Tested, works
         if (
