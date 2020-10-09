@@ -1,4 +1,4 @@
-TRACE_MOD = True
+TRACE_MOD = False
 
 class Node:
     def __init__(self, left_missionary, right_missionary, left_cannibal, right_cannibal, boat_size, boat_location = 1, path = []):
@@ -11,13 +11,14 @@ class Node:
         self.path = path
 
     def generate_next(self):
-
+        if TRACE_MOD:
+            print(self)
         # base case
         if self.left_missionary == 0 and self.left_cannibal == 0:
             print('base case')
             for n in self.path:
                 #print(n.left_missionary, n.left_cannibal, n.right_missionary, n.right_cannibal, n.boat_location)
-                print('left: {}M {}C    right: {}M {}C    boat: {}'.format(n.left_missionary, n.left_cannibal, n.right_missionary, n.right_cannibal, n.boat_location))
+                print(n)
             return True
 
         # CONSTRAINT: Boat cannot carry nonexisting people on the side that it is leaving
@@ -49,9 +50,15 @@ class Node:
                 if self.boat_location == 1: # send boat to right
                     new_location = 0
                     new_node = Node(self.left_missionary - j, self.right_missionary + j, self.left_cannibal - i + j, self.right_cannibal + i - j, self.boat_size, new_location, new_path)
+                    if TRACE_MOD:
+                        print("Carrying {} cannibals and {} missionaries to right".format(i - j, j))
+                        input("Press Enter to proceed")
                 else: # send boat to left
                     new_location = 1
                     new_node = Node(self.left_missionary + j, self.right_missionary - j, self.left_cannibal + i - j, self.right_cannibal - i + j, self.boat_size, new_location, new_path)
+                    if TRACE_MOD:
+                        print("Carrying {} cannibals and {} missionaries to left".format(i - j, j))
+                        input("Press Enter to proceed")
 
                 if new_node.generate_next():
                     return True
