@@ -1,10 +1,40 @@
-# Allows single stepping when True
-TRACE_MOD = False
+'''
+CS 461 - Artificial Intelligence - Fall 2020 - Homework 1
+Professor: Varol Akman
+Group Name: PROMINI
+Group Members:
+    -Hakkı Burak Okumuş
+    -Göksu Ece Okur
+    -Yüce Hasan Kılıç
+'''
+
+'''
+READ BEFORE RUNNING:
+    Toggle TRACE_MOD on line 34 if you want to observe intermediate steps
+    Assign number of initial people on sides and the boat size starting from line 156 for different problems
+'''
 
 '''
 Node class represents a single state in River Crossing Problem.
+Program creates all valid children (next states) that are not visited yet from a given node
+Uses Depth First Search (DFS) approach to solve the problem.
+Tries to reach to a leaf node following the same branch until it is exhausted. 
+
+Constraints for creating next states
+    1. Boat cannot carry more than its size
+    2. Boat cannot move while it is empty
+    3. Boat cannot pick up nonexisting people on the side that it is leaving
+    4. There cannot be more Cannibals than Missionaries on board
+    5. There cannot be more Cannibals than Missionaries when boat leaves
+    6. Already visited states must not be regenerated
+    7. There is no next state when everyone is on the right side.
 '''
+
+# Allows single stepping when True
+TRACE_MOD = False
+
 class Node:
+
     def __init__(self, left_missionary, right_missionary, left_cannibal, right_cannibal, boat_size, boat_location = 1, path = [], children = []):
         self.left_missionary = left_missionary
         self.right_missionary = right_missionary
@@ -15,8 +45,8 @@ class Node:
         self.path = path
         self.children = children
     
-
-    def generate_child(self, depth):
+    # Generates all valid children that do not violate constraints
+    def generate_child(self):
         # first try to send a full boat, if that does not work, reduce passenger number by 1
         # because of the limits of these loops, boat size constraints cannot be violated
         for i in range(self.boat_size, 0, -1): 
@@ -54,12 +84,14 @@ class Node:
                 # If new node does not violate constraints, add it to node's children
                 self.children.append(new_node)
     
+    # Recursive function that solves River Crossing Problem
+    # Depth is the current level of the node, root node is considered at level 1
     def solve(self, depth = 1):
         
         if TRACE_MOD and depth == 1:
             print("Initial state:")
             print(self)
-            input("Press Enter to proceed")
+            input("Press a button to proceed\n")
         
         # Boolean variable to stop the program if we reach a solution 
         solution_found = False
@@ -68,7 +100,7 @@ class Node:
         if self.left_missionary == 0 and self.left_cannibal == 0: # All people are on the right side
 
             if TRACE_MOD:
-                input("{}Solution found. Press Enter to see the solution".format("  " * depth))
+                input("{}Solution found. Press a button to see the solution\n".format("  " * depth))
 
             print('Solution: ')
             for n in self.path:
@@ -77,7 +109,7 @@ class Node:
             return True
         
         # Generate children nodes
-        self.generate_child(depth)
+        self.generate_child()
 
         if TRACE_MOD and len(self.children) == 0: # If there is no new child
             print("{}No new child available. Backtracing...".format("  " * depth))
@@ -91,9 +123,9 @@ class Node:
                 if self.boat_location == 1:
                     print("{}Carrying {} cannibals and {} missionaries to right".format("  " * depth, (self.left_cannibal - child.left_cannibal), (self.left_missionary - child.left_missionary)))
                 print("  " * depth + child.__repr__())
-                input("{}Press Enter to proceed".format("  " * depth))
+                input("{}Press a button to proceed\n".format("  " * depth))
 
-            # Solve the child and increase the depth    
+            # Solve the child and increase the depth.  Do not try the next sibling until this branch is exhausted   
             solution_found = child.solve(depth + 1)
 
             # Return if we found a solution
@@ -120,13 +152,33 @@ class Node:
         return False
 
 if __name__ == "__main__":
-    no_of_m_right = 6
-    no_of_m_left = 0
-    no_of_c_right = 6
-    no_of_c_left = 0
-    boat_size = 5
 
-    n1 = Node(no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size)
-    n1.solve()
+    no_of_m_right = 0 # Number of missionaries on right, initially
+    no_of_m_left  = 0 # Number of missionaries on left, initially
+    no_of_c_right = 0 # Number of cannibals on right, initially
+    no_of_c_left  = 0 # Number of cannibals on left, initially
+    boat_size     = 0 # Boat size
+
+    input("Press a button to solve Question 1\n")
+
+    # QUESTION 1
+    print("Solving Question 1\n")
+    problem_one = [5, 0, 5, 0, 3]
+    no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size = problem_one
+    # Create the initial state
+    root_node = Node(no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size)
+    # Solve
+    root_node.solve()
+
+    input("Press a button to solve Question 2a\n")
+
+    # QUESTION 2a)
+    print("Solving Question 2a\n")
+    problem_two_a = [6, 0, 6, 0, 4]
+    no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size = problem_one
+    # Create the initial state
+    root_node = Node(no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size)
+    # Solve
+    root_node.solve()
 
     pass
