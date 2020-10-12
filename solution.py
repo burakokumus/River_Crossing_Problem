@@ -31,7 +31,7 @@ Constraints for creating next states
 '''
 
 # Allows single stepping when True
-TRACE_MOD = False
+TRACE_MOD = True
 
 class Node:
 
@@ -112,7 +112,7 @@ class Node:
         self.generate_child()
 
         if TRACE_MOD and len(self.children) == 0: # If there is no new child
-            print("{}No new child available. Backtracing...".format("  " * depth))
+            print("{}No new child available. Backtracing...\n".format("  " * depth))
         
         # Try to solve problem for each children
         for child in self.children:
@@ -125,7 +125,7 @@ class Node:
                 print("  " * depth + child.__repr__())
                 input("{}Press a button to proceed\n".format("  " * depth))
 
-            # Solve the child and increase the depth.  Do not try the next sibling until this branch is exhausted   
+            # Solve the child and increase the depth.  Do not try the next sibling until this branch is exhausted (DFS Algorithm)  
             solution_found = child.solve(depth + 1)
 
             # Return if we found a solution
