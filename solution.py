@@ -10,14 +10,15 @@ Group Members:
 
 '''
 READ BEFORE RUNNING:
-    Toggle TRACE_MOD on line 34 if you want to observe intermediate steps
-    Assign number of initial people on sides and the boat size starting from line 157 for different problems
+    Toggle TRACE_MOD on line 35 if you want to observe intermediate steps
+    Assign number of initial people on sides and the boat size starting from line 158 for different problems
 '''
 
 '''
 Node class represents a single state in River Crossing Problem.
 Program creates all valid children (next states) that are not visited yet from a given node
 Uses Depth First Search (DFS) approach to solve the problem.
+Tree data structure is used to represent paths and find a solution (not necessarily the optimal one).
 Tries to reach to a leaf node following the same branch until it is exhausted. 
 
 Constraints for creating next states
@@ -41,7 +42,7 @@ class Node:
         self.left_cannibal = left_cannibal
         self.right_cannibal = right_cannibal
         self.boat_size = boat_size
-        self.boat_location = boat_location
+        self.boat_location = boat_location # 1 denotes left 0 denotes right.
         self.path = path
         self.children = children
     
@@ -114,7 +115,8 @@ class Node:
 
         if TRACE_MOD and len(self.children) == 0: # If there is no new child
             print("{}No new child available. Backtracing...\n".format("  " * depth))
-        
+            return False
+
         # Try to solve problem for each children
         for child in self.children:
 
@@ -192,7 +194,7 @@ if __name__ == "__main__":
     left: 0M 0C    right: 5M 5C    boat: 0
     '''
 
-    input("Press enter to solve Question 2a\n")
+    input("\nPress enter to solve Question 2a\n")
 
     # QUESTION 2a)
     print("Solving Question 2a\n")
@@ -221,5 +223,3 @@ if __name__ == "__main__":
     left: 2M 2C    right: 4M 4C    boat: 1
     left: 0M 0C    right: 6M 6C    boat: 0
     '''
-
-    pass
