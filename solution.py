@@ -11,7 +11,7 @@ Group Members:
 '''
 READ BEFORE RUNNING:
     Toggle TRACE_MOD on line 34 if you want to observe intermediate steps
-    Assign number of initial people on sides and the boat size starting from line 156 for different problems
+    Assign number of initial people on sides and the boat size starting from line 157 for different problems
 '''
 
 '''
@@ -31,7 +31,7 @@ Constraints for creating next states
 '''
 
 # Allows single stepping when True
-TRACE_MOD = True
+TRACE_MOD = False
 
 class Node:
 
@@ -70,6 +70,7 @@ class Node:
                     continue
 
                 # CONSTRAINT: Boat cannot leave more C than M
+
                 if new_node.left_cannibal > new_node.left_missionary and new_node.left_missionary > 0:
                     continue
 
@@ -91,7 +92,7 @@ class Node:
         if TRACE_MOD and depth == 1:
             print("Initial state:")
             print(self)
-            input("Press a button to proceed\n")
+            input("Press enter to proceed\n")
         
         # Boolean variable to stop the program if we reach a solution 
         solution_found = False
@@ -100,7 +101,7 @@ class Node:
         if self.left_missionary == 0 and self.left_cannibal == 0: # All people are on the right side
 
             if TRACE_MOD:
-                input("{}Solution found. Press a button to see the solution\n".format("  " * depth))
+                input("{}Solution found. Press enter to see the solution\n".format("  " * depth))
 
             print('Solution: ')
             for n in self.path:
@@ -123,7 +124,7 @@ class Node:
                 if self.boat_location == 1:
                     print("{}Carrying {} cannibals and {} missionaries to right".format("  " * depth, (self.left_cannibal - child.left_cannibal), (self.left_missionary - child.left_missionary)))
                 print("  " * depth + child.__repr__())
-                input("{}Press a button to proceed\n".format("  " * depth))
+                input("{}Press enter to proceed\n".format("  " * depth))
 
             # Solve the child and increase the depth.  Do not try the next sibling until this branch is exhausted (DFS Algorithm)  
             solution_found = child.solve(depth + 1)
@@ -159,26 +160,66 @@ if __name__ == "__main__":
     no_of_c_left  = 0 # Number of cannibals on left, initially
     boat_size     = 0 # Boat size
 
-    input("Press a button to solve Question 1\n")
+    input("Press enter to solve Question 1\n")
 
     # QUESTION 1
     print("Solving Question 1\n")
     problem_one = [5, 0, 5, 0, 3]
     no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size = problem_one
     # Create the initial state
-    root_node = Node(no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size)
+    root_node = Node(no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size, 1, [], [])
     # Solve
     root_node.solve()
 
-    input("Press a button to solve Question 2a\n")
+    '''
+    Solution for Q1
+
+    left: 5M 5C    right: 0M 0C    boat: 1
+    left: 5M 2C    right: 0M 3C    boat: 0
+    left: 5M 4C    right: 0M 1C    boat: 1
+    left: 5M 1C    right: 0M 4C    boat: 0
+    left: 5M 3C    right: 0M 2C    boat: 1
+    left: 5M 0C    right: 0M 5C    boat: 0
+    left: 5M 2C    right: 0M 3C    boat: 1
+    left: 2M 2C    right: 3M 3C    boat: 0
+    left: 3M 3C    right: 2M 2C    boat: 1
+    left: 0M 3C    right: 5M 2C    boat: 0
+    left: 0M 5C    right: 5M 0C    boat: 1
+    left: 0M 2C    right: 5M 3C    boat: 0
+    left: 0M 4C    right: 5M 1C    boat: 1
+    left: 0M 1C    right: 5M 4C    boat: 0
+    left: 0M 3C    right: 5M 2C    boat: 1
+    left: 0M 0C    right: 5M 5C    boat: 0
+    '''
+
+    input("Press enter to solve Question 2a\n")
 
     # QUESTION 2a)
     print("Solving Question 2a\n")
     problem_two_a = [6, 0, 6, 0, 4]
-    no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size = problem_one
+    no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size = problem_two_a
+
     # Create the initial state
-    root_node = Node(no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size)
-    # Solve
+    root_node = Node(no_of_m_right, no_of_m_left, no_of_c_right, no_of_c_left, boat_size, 1, [], [])
     root_node.solve()
+
+    '''
+    Solution for Q2a
+
+    left: 6M 6C    right: 0M 0C    boat: 1
+    left: 6M 2C    right: 0M 4C    boat: 0
+    left: 6M 5C    right: 0M 1C    boat: 1
+    left: 6M 1C    right: 0M 5C    boat: 0
+    left: 6M 4C    right: 0M 2C    boat: 1
+    left: 6M 0C    right: 0M 6C    boat: 0
+    left: 6M 3C    right: 0M 3C    boat: 1
+    left: 3M 3C    right: 3M 3C    boat: 0
+    left: 4M 4C    right: 2M 2C    boat: 1
+    left: 2M 2C    right: 4M 4C    boat: 0
+    left: 3M 3C    right: 3M 3C    boat: 1
+    left: 1M 1C    right: 5M 5C    boat: 0
+    left: 2M 2C    right: 4M 4C    boat: 1
+    left: 0M 0C    right: 6M 6C    boat: 0
+    '''
 
     pass
